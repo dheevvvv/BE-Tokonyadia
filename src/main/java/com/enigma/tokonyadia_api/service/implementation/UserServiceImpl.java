@@ -31,10 +31,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ValidationUtil validationUtil;
 
-    @Value("${user-admin}")
+    @Value("${tokonyadia.user-admin}")
     private String USERNAME_ADMIN;
 
-    @Value("${user-password}")
+    @Value("${tokonyadia.user-password}")
     private String PASSWORD_ADMIN;
 
 

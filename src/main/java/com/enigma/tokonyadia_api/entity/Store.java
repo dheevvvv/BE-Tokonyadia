@@ -32,6 +32,10 @@ public class Store {
     @Column(name = "address", length = 100)
     private String address;
 
+    @OneToOne
+    @JoinColumn(name = "admin_store_id", unique = true)
+    private AdminStore adminStore;
+
     @OneToMany(mappedBy = "store")
     private Set<Product> products = new LinkedHashSet<>();
 
