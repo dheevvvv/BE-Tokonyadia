@@ -15,7 +15,7 @@ public class StoreController {
     private final StoreService storeService;
 
     @GetMapping("/{id}")
-    public Store getStoreById(@PathVariable Integer id) {
+    public Store getStoreById(@PathVariable String id) {
         return storeService.getByID(id);
     }
 
@@ -25,13 +25,13 @@ public class StoreController {
     }
 
     @PutMapping("/update/{id}")
-    public Store updateStore(@PathVariable Integer id, @RequestBody Store store) {
+    public Store updateStore(@PathVariable String id, @RequestBody Store store) {
         store.setId(id);
         return storeService.update(store);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteStoreById(@PathVariable Integer id) {
+    public String deleteStoreById(@PathVariable String id) {
         return storeService.deleteById(id);
     }
 }

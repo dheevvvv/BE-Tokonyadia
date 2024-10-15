@@ -16,17 +16,19 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "transaction")
+@Table(name = "t_transaction")
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_id_gen")
-    @SequenceGenerator(name = "transaction_id_gen", sequenceName = "transaction_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cashier_id")
+    private Cashier cashier;
 
     @ColumnDefault("now()")
     @Column(name = "transaction_date")

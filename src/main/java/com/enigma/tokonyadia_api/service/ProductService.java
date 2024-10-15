@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface ProductService {
 
-    public Product getByID(Integer id);
+    public Product getByID(String id);
     public Product create(Product menu);
     public List<Product> getAll();
     public Product update(Product menu);
-    public String deleteById(Integer id);
+    public String deleteById(String id);
 
 }

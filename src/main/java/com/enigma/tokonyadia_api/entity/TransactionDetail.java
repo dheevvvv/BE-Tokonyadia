@@ -11,13 +11,11 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "transaction_detail")
+@Table(name = "t_transaction_detail")
 public class TransactionDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_detail_id_gen")
-    @SequenceGenerator(name = "transaction_detail_id_gen", sequenceName = "transaction_detail_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id")

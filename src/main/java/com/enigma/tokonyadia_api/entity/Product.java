@@ -12,15 +12,13 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product")
+@Table(name = "m_product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_gen")
-    @SequenceGenerator(name = "product_id_gen", sequenceName = "product_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-    @Column(name = "name", length = Integer.MAX_VALUE)
+    @Column(name = "name", length = 60)
     private String name;
 
     @Column(name = "description", length = Integer.MAX_VALUE)

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface StoreService {
 
-    Store getByID(Integer id);
+    Store getByID(String id);
     Store create(Store store);
     List<Store> getAll();
     Store update(Store store);
-    String deleteById(Integer id);
+    String deleteById(String id);
 }

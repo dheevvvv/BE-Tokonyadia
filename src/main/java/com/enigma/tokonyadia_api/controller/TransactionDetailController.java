@@ -15,7 +15,7 @@ public class TransactionDetailController {
     private final TransactionDetailService transactionDetailService;
 
     @GetMapping("/{id}")
-    public TransactionDetail getTransactionDetailById(@PathVariable Integer id) {
+    public TransactionDetail getTransactionDetailById(@PathVariable String id) {
         return transactionDetailService.getByID(id);
     }
 

@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface CustomerService {
 
-    public Customer getByID(Integer id);
+    public Customer getByID(String id);
     public Customer create(Customer menu);
     public List<Customer> getAll();
     public Customer update(Customer menu);
-    public String deleteById(Integer id);
+    public String deleteById(String id);
 
 }

@@ -15,7 +15,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public Customer getByID(Integer id) {
+    public Customer getByID(String id) {
         return customerRepository.findById(id).orElse(null);
     }
 
@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public String deleteById(Integer id) {
+    public String deleteById(String id) {
         if (customerRepository.findById(id).isPresent()) {
             customerRepository.deleteById(id);
             return "Customer deleted";

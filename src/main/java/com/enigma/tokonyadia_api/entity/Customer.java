@@ -11,29 +11,31 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customer")
+@Table(name = "m_customer")
 public class Customer {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_gen")
-    @SequenceGenerator(name = "customer_id_gen", sequenceName = "customer_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "name", nullable = false, length = 60)
     private String name;
 
-    @Column(name = "address", length = Integer.MAX_VALUE)
+    @Column(name = "address", length = 100)
     private String address;
 
-    @Column(name = "phone_number", length = Integer.MAX_VALUE)
+    @Column(name = "phone_number", length = 16)
     private String phoneNumber;
 
-    @Column(name = "email", length = Integer.MAX_VALUE)
+    @Column(name = "email", length = 40)
     private String email;
 
     @OneToMany(mappedBy = "customer")
     private Set<Transaction> transactions = new LinkedHashSet<>();
+
+    @OneToOne
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
 }

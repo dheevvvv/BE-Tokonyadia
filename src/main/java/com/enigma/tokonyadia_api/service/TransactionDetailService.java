@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TransactionDetailService {
 
-    TransactionDetail getByID(Integer id);
+    TransactionDetail getByID(String id);
     TransactionDetail create(TransactionDetail transactionDetail);
     List<TransactionDetail> getAll();
 }

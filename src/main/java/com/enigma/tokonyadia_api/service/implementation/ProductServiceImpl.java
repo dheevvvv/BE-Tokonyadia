@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
     private final StoreService storeService;
 
     @Override
-    public Product getByID(Integer id) {
+    public Product getByID(String id) {
         return productRepository.findById(id).orElse(null);
     }
 
@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String deleteById(Integer id) {
+    public String deleteById(String id) {
         if (productRepository.findById(id).isPresent()) {
             productRepository.deleteById(id);
             return "Product deleted";

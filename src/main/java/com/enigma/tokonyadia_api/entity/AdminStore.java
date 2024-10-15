@@ -14,25 +14,23 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "m_store")
-public class Store {
+@Table(name = "m_admin_store")
+public class AdminStore {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "no_siup", length = 50)
-    private String noSiup;
-
-    @Column(name = "name", length = 60)
+    @Column(name = "name", nullable = false, length = 60)
     private String name;
 
     @Column(name = "phone_number", length = 16)
     private String phoneNumber;
 
-    @Column(name = "address", length = 100)
-    private String address;
+    @OneToOne
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
-    @OneToMany(mappedBy = "store")
-    private Set<Product> products = new LinkedHashSet<>();
-
+    @OneToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 }

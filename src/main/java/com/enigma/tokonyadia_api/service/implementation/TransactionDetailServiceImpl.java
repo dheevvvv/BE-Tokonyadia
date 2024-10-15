@@ -21,7 +21,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     private final TransactionService transactionService;
 
     @Override
-    public TransactionDetail getByID(Integer id) {
+    public TransactionDetail getByID(String id) {
         return transactionDetailRepository.findById(id).orElse(null);
     }
 

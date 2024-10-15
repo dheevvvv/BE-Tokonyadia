@@ -17,7 +17,7 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
 
     @Override
-    public Store getByID(Integer id) {
+    public Store getByID(String id) {
         return storeRepository.findById(id).orElse(null);
     }
 
@@ -41,7 +41,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public String deleteById(Integer id) {
+    public String deleteById(String id) {
         if (storeRepository.findById(id).isPresent()) {
             storeRepository.delete(storeRepository.findById(id).get());
             return "Menu deleted";

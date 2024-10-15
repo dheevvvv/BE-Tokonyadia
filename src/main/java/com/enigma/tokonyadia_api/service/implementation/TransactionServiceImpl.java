@@ -20,7 +20,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public Transaction getByID(Integer id) {
+    public Transaction getByID(String id) {
         return transactionRepository.findById(id).orElse(null);
         //harus dibuat beberapa transaction detail
     }

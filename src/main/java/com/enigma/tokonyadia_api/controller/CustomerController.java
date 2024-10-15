@@ -22,7 +22,7 @@ public class CustomerController {
         return customerService.create(customer);
     }
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Integer id) {
+    public Customer getCustomerById(@PathVariable String id) {
         return customerService.getByID(id);
     }
 
@@ -32,13 +32,13 @@ public class CustomerController {
     }
 
     @PutMapping("/update/{id}")
-    public Customer updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    public Customer updateCustomer(@PathVariable String id, @RequestBody Customer customer) {
         customer.setId(id);
         return customerService.update(customer);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteCustomerById(@PathVariable Integer id) {
+    public String deleteCustomerById(@PathVariable String id) {
         return customerService.deleteById(id);
     }
 
