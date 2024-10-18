@@ -12,26 +12,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionDetailController {
 
-    private final TransactionDetailService transactionDetailService;
-
-    @GetMapping("/{id}")
-    public TransactionDetail getTransactionDetailById(@PathVariable String id) {
-        return transactionDetailService.getByID(id);
-    }
-
-    @GetMapping
-    public List<TransactionDetail> getAllTransactionDetails() {
-        return transactionDetailService.getAll();
-    }
-
-//    @PutMapping("/update/{id}")
-//    public TransactionDetail updateTransactionDetail(@PathVariable Integer id, @RequestBody TransactionDetail transactionDetail) {
-//        transactionDetail.setId(id);
-//        return transactionDetailService.update(transactionDetail);
-//    }
-//
-//    @DeleteMapping("/delete/{id}")
-//    public String deleteTransactionDetailById(@PathVariable Integer id) {
-//        return transactionDetailService.deleteById(id);
-//    }
 }

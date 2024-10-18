@@ -1,5 +1,9 @@
-package com.enigma.tokonyadia_api.dto.response;
+package com.enigma.tokonyadia_api.dto.request;
 
+import com.enigma.tokonyadia_api.entity.AdminStore;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Getter
@@ -7,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StoreResponse {
+public class StoreRequest {
     private String id;
     private String noSiup;
     private String name;

@@ -12,26 +12,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
-
-    @GetMapping("/{id}")
-    public Product getProductById(@PathVariable String id) {
-        return productService.getByID(id);
-    }
-
-    @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAll();
-    }
-
-    @PutMapping("/update/{id}")
-    public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
-        product.setId(id);
-        return productService.update(product);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String deleteProductById(@PathVariable String id) {
-        return productService.deleteById(id);
-    }
 }

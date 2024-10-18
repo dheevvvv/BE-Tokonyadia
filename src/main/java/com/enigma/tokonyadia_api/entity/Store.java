@@ -1,12 +1,11 @@
 package com.enigma.tokonyadia_api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "m_store")
+@Builder
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +37,6 @@ public class Store {
     private AdminStore adminStore;
 
     @OneToMany(mappedBy = "store")
-    private Set<Product> products = new LinkedHashSet<>();
+    private List<Product> products = new ArrayList<>();
 
 }
