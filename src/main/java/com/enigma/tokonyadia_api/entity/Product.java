@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -13,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "m_product")
+@Builder
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,7 +27,7 @@ public class Product {
     private String description;
 
     @Column(name = "price")
-    private Integer price;
+    private Long price;
 
     @Column(name = "stock")
     private Integer stock;
@@ -34,6 +36,8 @@ public class Product {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> images;
 
     @OneToMany(mappedBy = "product")
     private Set<TransactionDetail> transactionDetails = new LinkedHashSet<>();
