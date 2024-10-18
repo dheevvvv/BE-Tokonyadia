@@ -13,46 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionServiceImpl implements TransactionService {
+public class TransactionServiceImpl {
 
-    private final TransactionRepository transactionRepository;
-    private final CustomerService customerService;
 
-    @Override
-    @Transactional
-    public Transaction getByID(String id) {
-        return transactionRepository.findById(id).orElse(null);
-        //harus dibuat beberapa transaction detail
-    }
-
-    @Override
-    public Transaction create(Transaction transaction) {
-        Customer customer = transaction.getCustomer();
-        if (customer==null || customerService.getByID(transaction.getCustomer().getId())==null) return null;
-        return transactionRepository.save(transaction);
-    }
-
-    @Override
-    public List<Transaction> getAll() {
-        return transactionRepository.findAll();
-    }
-
-//    @Override
-//    public Transaction update(Transaction transaction) {
-//        Transaction oldTransaction = transactionRepository.findById(transaction.getId()).orElse(null);
-//        if (oldTransaction==null) return null;
-//        Customer customer = oldTransaction.getCustomer();
-//        if(customer==null || customerService.getByID(transaction.getCustomer().getId())==null) return null;
-//
-//        return transactionRepository.save(transaction);
-//    }
-//
-//    @Override
-//    public String deleteById(Integer id) {
-//        if (transactionRepository.findById(id).isPresent()) {
-//            transactionRepository.deleteById(id);
-//            return "Transaction deleted";
-//        }
-//        return "Transaction not found";
-//    }
 }

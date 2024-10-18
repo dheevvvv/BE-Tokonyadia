@@ -1,5 +1,7 @@
-package com.enigma.tokonyadia_api.dto.response;
+package com.enigma.tokonyadia_api.dto.request;
 
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -7,11 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerResponse {
-    private String id;
+public class CustomerCreateRequest {
+    private String username;
+    private String password;
     private String name;
     private String email;
     private String phoneNumber;
     private String address;
-    private String userId;
 }

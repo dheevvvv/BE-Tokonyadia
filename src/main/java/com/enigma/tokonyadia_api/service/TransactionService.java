@@ -6,8 +6,4 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction getByID(String id);
-    Transaction create(Transaction transaction);
-    List<Transaction> getAll();
-
 }

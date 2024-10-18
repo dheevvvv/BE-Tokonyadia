@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/refresh-token").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/admin-store").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
