@@ -22,12 +22,6 @@ public class SecurityConfiguration {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthEntryPoint customAuthEntryPoint;
 
-    /*
-     * .authorizeHttpRequests -> digunakan untuk menentukan endpoint apa yang akan di autentikasi atau tidak
-     * .sessionManagement -> digunakan untuk menentukan autentikasi dengan JWT, bahwa jwt itu stateless
-     * .addFilterBefore -> digunakan untuk menyisipkan filter yang akan dijalankan sebelum data masuk ke controller
-     * UsernamePasswordAuthenticationFilter.class -> jenis class yang akan dijalankan untuk menjalankan security filter untuk verify JWT.
-     * */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -44,6 +38,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/auth/refresh-token").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/admin-store").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/payments/notifications").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
