@@ -83,18 +83,23 @@ public class ProductController {
         return ResponseUtil.buildResponsePage(HttpStatus.OK, "Success get all products", products);
     }
 
+    @Operation(summary = "Get product by id")
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getById(@PathVariable String id) {
         ProductResponse product = productService.getById(id);
         return ResponseUtil.buildResponse(HttpStatus.OK, "Success get product by id", product);
     }
 
+    @Operation(summary = "Update Product")
+    @PreAuthorize("hasRole('ADMIN_STORE')")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody ProductRequest request) {
         ProductResponse updatedProduct = productService.update(id, request);
         return ResponseUtil.buildResponse(HttpStatus.OK, "Success updated product", updatedProduct);
     }
 
+    @Operation(summary = "Delete product by id")
+    @PreAuthorize("hasRole('ADMIN_STORE')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable String id) {
         productService.deleteById(id);

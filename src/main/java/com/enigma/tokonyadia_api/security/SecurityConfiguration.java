@@ -34,11 +34,12 @@ public class SecurityConfiguration {
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req ->
                         req.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/refresh-token").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/admin-store").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/payments/notifications").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/payments/notifications").permitAll().anyRequest().authenticated()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
