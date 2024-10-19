@@ -92,14 +92,14 @@ public class PaymentServiceImpl implements PaymentService {
     public void getNotification(MidtransNotificationRequest request) {
         log.info("Start getNotification: {}", System.currentTimeMillis());
         if (!validateSignatureKey(request)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid signature key");
-        Payment payment = paymentRepository.findByTransaction_Id(request.getTransactionId())
+        Payment payment = paymentRepository.findByTransaction_Id(request.getOrderId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "payment transaction not found"));
 
         PaymentStatus newPaymentStatus = PaymentStatus.findByDesc(request.getTransactionStatus());
         payment.setPaymentStatus(newPaymentStatus);
         payment.setUpdatedAt(LocalDateTime.now());
 
-        Transaction transaction = transactionService.getOne(request.getTransactionId());
+        Transaction transaction = transactionService.getOne(request.getOrderId());
 
         if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.SETTLEMENT)) {
             transaction.setTransactionStatus(TransactionStatus.CONFIRMED);
@@ -115,7 +115,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     private boolean validateSignatureKey(MidtransNotificationRequest request) {
-        String rawString = request.getTransactionId() + request.getStatusCode() + request.getGrossAmount() + MIDTRANS_SERVER_KEY;
+        String rawString = request.getOrderId() + request.getStatusCode() + request.getGrossAmount() + MIDTRANS_SERVER_KEY;
         String signatureKey = HashUtil.encryptThisString(rawString);
         return request.getSignatureKey().equalsIgnoreCase(signatureKey);
     }

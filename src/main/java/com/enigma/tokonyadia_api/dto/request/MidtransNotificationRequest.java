@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MidtransNotificationRequest {
-    @JsonProperty(value = "transaction_id")
-    private String transactionId;
+    @JsonProperty(value = "order_id")
+    private String orderId;
     @JsonProperty(value = "status_code")
     private String statusCode;
     @JsonProperty(value = "gross_amount")

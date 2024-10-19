@@ -38,7 +38,7 @@ public class PaymentController {
     public ResponseEntity<?> handleNotification(@RequestBody Map<String, String> request) {
         MidtransNotificationRequest midtransNotificationRequest = MidtransNotificationRequest.builder()
                 .transactionTime(request.get("transaction_time"))
-                .transactionId(request.get("transaction_id"))
+                .orderId(request.get("order_id"))
                 .grossAmount(request.get("gross_amount"))
                 .statusCode(request.get("status_code"))
                 .transactionStatus(request.get("transaction_status"))
