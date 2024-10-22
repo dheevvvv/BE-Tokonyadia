@@ -25,8 +25,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -69,12 +71,25 @@ public class PaymentServiceImpl implements PaymentService {
                     .stock(product.getStock()).build());
         }
 
+        List<MidtransItemDetailRequest> itemDetails = transaction.getTransactionDetails().stream()
+                .map(this::toMidtransItemDetailResponse)
+                .collect(Collectors.toList());
+
+
+        MidtransCustomerDetailsRequest customerDetailsRequest = MidtransCustomerDetailsRequest.builder()
+                .firstName(transaction.getCustomer().getName())
+                .email(transaction.getCustomer().getEmail())
+                .phone(transaction.getCustomer().getPhoneNumber())
+                .build();
+
         MidtransPaymentRequest midtransPaymentRequest = MidtransPaymentRequest.builder()
                 .transactionDetail(MidtransTransactionRequest.builder()
                         .transactionId(transaction.getId())
                         .grossAmount(amount)
                         .build())
                 .enabledPayments(List.of("bca_va", "gopay", "shopeepay", "other_qris"))
+                .itemDetails(itemDetails)
+                .customerDetails(customerDetailsRequest)
                 .build();
 
         String headerValue = "Basic " + Base64.getEncoder().encodeToString(MIDTRANS_SERVER_KEY.getBytes(StandardCharsets.UTF_8));
@@ -128,8 +143,7 @@ public class PaymentServiceImpl implements PaymentService {
             // Pembayaran gagal karena DENY, status menjadi deny dan kembalikan stok
             transaction.setTransactionStatus(TransactionStatus.DENY);
             restoreProductStock(transaction);
-        }
-        else {
+        } else {
             // Pembayaran gagal karena status lain, status menjadi cancel dan kembalikan stok
             transaction.setTransactionStatus(TransactionStatus.CANCEL);
             restoreProductStock(transaction);
@@ -148,6 +162,14 @@ public class PaymentServiceImpl implements PaymentService {
         String rawString = request.getOrderId() + request.getStatusCode() + request.getGrossAmount() + MIDTRANS_SERVER_KEY;
         String signatureKey = HashUtil.encryptThisString(rawString);
         return request.getSignatureKey().equalsIgnoreCase(signatureKey);
+    }
+
+    public MidtransItemDetailRequest toMidtransItemDetailResponse(TransactionDetail transactionDetail) {
+        return MidtransItemDetailRequest.builder()
+                .name(transactionDetail.getProduct().getName())
+                .price(transactionDetail.getProduct().getPrice())
+                .quantity(transactionDetail.getQuantity())
+                .build();
     }
 
     private void restoreProductStock(Transaction transaction) {

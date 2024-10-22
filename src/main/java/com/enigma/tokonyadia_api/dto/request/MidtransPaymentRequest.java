@@ -16,4 +16,10 @@ public class MidtransPaymentRequest {
 
     @JsonProperty(value = "enabled_payments")
     private List<String> enabledPayments;
+
+    @JsonProperty(value = "item_details")
+    private List<MidtransItemDetailRequest> itemDetails;
+
+    @JsonProperty(value = "customer_details")
+    private MidtransCustomerDetailsRequest customerDetails;
 }
