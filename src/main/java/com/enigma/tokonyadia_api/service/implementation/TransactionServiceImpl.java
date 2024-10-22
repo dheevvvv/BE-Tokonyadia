@@ -67,9 +67,25 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public TransactionResponse addTransactionDetail(String transactionId, TransactionDetailRequest request) {
+    public TransactionResponse addTransactionDetail(String customerId, TransactionDetailRequest request) {
         validationUtil.validate(request);
-        Transaction transaction = getOne(transactionId);
+
+        Optional<Transaction> existingTransactionDraft = transactionRepository.findByCustomerIdAndTransactionStatus(customerId, TransactionStatus.DRAFT);
+
+        Transaction transaction;
+
+        if (existingTransactionDraft.isPresent()){
+            transaction = existingTransactionDraft.get();
+        } else {
+            Customer customer = customerService.getOne(customerId);
+            Transaction draftTransaction = Transaction.builder()
+                    .customer(customer)
+                    .transactionStatus(TransactionStatus.DRAFT)
+                    .transactionDetails(new ArrayList<>())
+                    .build();
+            transaction = transactionRepository.saveAndFlush(draftTransaction);
+        }
+
         if (transaction.getTransactionStatus() != TransactionStatus.DRAFT) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ERROR_ADD_ITEMS_TO_NON_DRAFT");
         }

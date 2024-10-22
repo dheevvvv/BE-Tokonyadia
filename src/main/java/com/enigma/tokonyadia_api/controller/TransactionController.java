@@ -47,9 +47,9 @@ public class TransactionController {
 
     @Operation(summary = "get add transaction details")
     @PreAuthorize("hasRole('CUSTOMER')")
-    @PostMapping("/{transactionId}/details")
-    public ResponseEntity<?> addTransactionDetail(@PathVariable String transactionId, @RequestBody TransactionDetailRequest request) {
-        TransactionResponse transactionResponse = transactionService.addTransactionDetail(transactionId, request);
+    @PostMapping("/{customerId}/details")
+    public ResponseEntity<?> addTransactionDetail(@PathVariable String customerId, @RequestBody TransactionDetailRequest request) {
+        TransactionResponse transactionResponse = transactionService.addTransactionDetail(customerId, request);
         return ResponseUtil.buildResponse(HttpStatus.OK,"SUCCESS_ADD_TRANSACTION_DETAIL", transactionResponse);
     }
 
