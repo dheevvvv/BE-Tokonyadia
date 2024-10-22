@@ -7,10 +7,12 @@ import com.enigma.tokonyadia_api.dto.request.*;
 import com.enigma.tokonyadia_api.dto.response.MidtransSnapResponse;
 import com.enigma.tokonyadia_api.dto.response.PaymentResponse;
 import com.enigma.tokonyadia_api.entity.Payment;
+import com.enigma.tokonyadia_api.entity.Product;
 import com.enigma.tokonyadia_api.entity.Transaction;
 import com.enigma.tokonyadia_api.entity.TransactionDetail;
 import com.enigma.tokonyadia_api.repository.PaymentRepository;
 import com.enigma.tokonyadia_api.service.PaymentService;
+import com.enigma.tokonyadia_api.service.ProductService;
 import com.enigma.tokonyadia_api.service.TransactionService;
 import com.enigma.tokonyadia_api.util.HashUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final TransactionService transactionService;
     private final MidtransClient midtransClient;
+    private final ProductService productService;
 
     @Value("${midtrans.server.key}")
     private String MIDTRANS_SERVER_KEY;
@@ -52,6 +55,18 @@ public class PaymentServiceImpl implements PaymentService {
             Integer quantity = transactionDetail.getQuantity();
             Long price = transactionDetail.getPrice();
             amount += quantity * price;
+
+            // Kurangi stok sementara (keep stock)
+            Product product = transactionDetail.getProduct();
+            if (product.getStock() < quantity) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT_ENOUGH_STOCK");
+            }
+            product.setStock(product.getStock() - quantity);
+            productService.update(product.getId(), ProductRequest.builder()
+                            .name(product.getName())
+                            .description(product.getDescription())
+                            .price(product.getPrice())
+                    .stock(product.getStock()).build());
         }
 
         MidtransPaymentRequest midtransPaymentRequest = MidtransPaymentRequest.builder()
@@ -101,8 +116,21 @@ public class PaymentServiceImpl implements PaymentService {
 
         Transaction transaction = transactionService.getOne(request.getOrderId());
 
+        // Jika pembayaran berhasil, ubah status transaksi
         if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.SETTLEMENT)) {
             transaction.setTransactionStatus(TransactionStatus.CONFIRMED);
+        } else if (newPaymentStatus != null && (newPaymentStatus.equals(PaymentStatus.EXPIRE) || newPaymentStatus.equals(PaymentStatus.CANCEL))) {
+            // Mengembalikan stok produk jika pembayaran gagal
+            for (TransactionDetail transactionDetail : transaction.getTransactionDetails()) {
+                Product product = transactionDetail.getProduct();
+                // Kembalikan stok
+                product.setStock(product.getStock() + transactionDetail.getQuantity());
+                productService.update(product.getId(), ProductRequest.builder()
+                                .name(product.getName())
+                                .description(product.getDescription())
+                                .price(product.getPrice())
+                        .stock(product.getStock()).build());
+            }
         }
 
         UpdateTransactionStatusRequest updateTransactionStatusRequest = UpdateTransactionStatusRequest.builder()

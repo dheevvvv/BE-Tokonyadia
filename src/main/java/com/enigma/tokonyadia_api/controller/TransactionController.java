@@ -38,14 +38,14 @@ public class TransactionController {
     }
 
     @Operation(summary = "get transaction details")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @GetMapping("/{transactionId}/details")
     public ResponseEntity<?> getTransactionDetails(@PathVariable String transactionId) {
         List<TransactionDetailResponse> transactionDetailResponses = transactionService.getTransactionDetails(transactionId);
         return ResponseUtil.buildResponse(HttpStatus.OK, "SUCCESS_GET_TRANSACTION_DETAILS", transactionDetailResponses);
     }
 
-    @Operation(summary = "get add transaction details")
+    @Operation(summary = "add product to transaction")
     @PreAuthorize("hasRole('CUSTOMER')")
     @PostMapping("/{customerId}/details")
     public ResponseEntity<?> addTransactionDetail(@PathVariable String customerId, @RequestBody TransactionDetailRequest request) {
@@ -54,6 +54,7 @@ public class TransactionController {
     }
 
     @Operation(summary = "update transaction detail")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @PutMapping("/{transactionId}/details/{detailId}")
     public ResponseEntity<?> updateTransactionDetail(@PathVariable String transactionId, @PathVariable String detailId, @RequestBody TransactionDetailRequest request) {
         TransactionResponse transactionResponse = transactionService.updateTransactionDetail(transactionId, detailId, request);
@@ -61,7 +62,7 @@ public class TransactionController {
     }
 
     @Operation(summary = "remove transactio detail")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('CUSTOMER')")
     @DeleteMapping("/{transactionId}/details/{detailId}")
     public ResponseEntity<?> removeTransactionDetail(@PathVariable String transactionId, @PathVariable String detailId) {
         TransactionResponse transactionResponse = transactionService.removeTransactionDetail(transactionId, detailId);
