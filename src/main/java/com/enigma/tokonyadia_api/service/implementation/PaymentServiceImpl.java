@@ -135,17 +135,13 @@ public class PaymentServiceImpl implements PaymentService {
         if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.SETTLEMENT)) {
             // Pembayaran berhasil, status transaksi menjadi CONFIRMED
             transaction.setTransactionStatus(TransactionStatus.CONFIRMED);
-        } else if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.EXPIRE)) {
+        } else if (newPaymentStatus != null && (newPaymentStatus.equals(PaymentStatus.EXPIRE)) || newPaymentStatus.equals(PaymentStatus.CANCEL)) {
             // Pembayaran gagal karena EXPIRE, status menjadi expiry dan kembalikan stok
             transaction.setTransactionStatus(TransactionStatus.EXPIRE);
             restoreProductStock(transaction);
         } else if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.DENY)) {
             // Pembayaran gagal karena DENY, status menjadi deny dan kembalikan stok
             transaction.setTransactionStatus(TransactionStatus.DENY);
-            restoreProductStock(transaction);
-        } else {
-            // Pembayaran gagal karena status lain, status menjadi cancel dan kembalikan stok
-            transaction.setTransactionStatus(TransactionStatus.CANCEL);
             restoreProductStock(transaction);
         }
 
