@@ -9,6 +9,9 @@ public enum TransactionStatus {
     DRAFT("Draft"),
     PENDING("Pending"),
     CONFIRMED("Confirmed"),
+    EXPIRE("Expired"),
+    CANCEL("Cancel"),
+    DENY("Deny"),
     PROCESSING("Processing"),
     COMPLETED("Completed");
 

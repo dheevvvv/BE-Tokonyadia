@@ -116,21 +116,23 @@ public class PaymentServiceImpl implements PaymentService {
 
         Transaction transaction = transactionService.getOne(request.getOrderId());
 
-        // Jika pembayaran berhasil, ubah status transaksi
+
         if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.SETTLEMENT)) {
+            // Pembayaran berhasil, status transaksi menjadi CONFIRMED
             transaction.setTransactionStatus(TransactionStatus.CONFIRMED);
-        } else if (newPaymentStatus != null && (newPaymentStatus.equals(PaymentStatus.EXPIRE) || newPaymentStatus.equals(PaymentStatus.CANCEL))) {
-            // Mengembalikan stok produk jika pembayaran gagal
-            for (TransactionDetail transactionDetail : transaction.getTransactionDetails()) {
-                Product product = transactionDetail.getProduct();
-                // Kembalikan stok
-                product.setStock(product.getStock() + transactionDetail.getQuantity());
-                productService.update(product.getId(), ProductRequest.builder()
-                                .name(product.getName())
-                                .description(product.getDescription())
-                                .price(product.getPrice())
-                        .stock(product.getStock()).build());
-            }
+        } else if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.EXPIRE)) {
+            // Pembayaran gagal karena EXPIRE, status menjadi expiry dan kembalikan stok
+            transaction.setTransactionStatus(TransactionStatus.EXPIRE);
+            restoreProductStock(transaction);
+        } else if (newPaymentStatus != null && newPaymentStatus.equals(PaymentStatus.DENY)) {
+            // Pembayaran gagal karena DENY, status menjadi deny dan kembalikan stok
+            transaction.setTransactionStatus(TransactionStatus.DENY);
+            restoreProductStock(transaction);
+        }
+        else {
+            // Pembayaran gagal karena status lain, status menjadi cancel dan kembalikan stok
+            transaction.setTransactionStatus(TransactionStatus.CANCEL);
+            restoreProductStock(transaction);
         }
 
         UpdateTransactionStatusRequest updateTransactionStatusRequest = UpdateTransactionStatusRequest.builder()
@@ -146,5 +148,18 @@ public class PaymentServiceImpl implements PaymentService {
         String rawString = request.getOrderId() + request.getStatusCode() + request.getGrossAmount() + MIDTRANS_SERVER_KEY;
         String signatureKey = HashUtil.encryptThisString(rawString);
         return request.getSignatureKey().equalsIgnoreCase(signatureKey);
+    }
+
+    private void restoreProductStock(Transaction transaction) {
+        for (TransactionDetail transactionDetail : transaction.getTransactionDetails()) {
+            Product product = transactionDetail.getProduct();
+            product.setStock(product.getStock() + transactionDetail.getQuantity());
+            productService.update(product.getId(), ProductRequest.builder()
+                    .name(product.getName())
+                    .description(product.getDescription())
+                    .price(product.getPrice())
+                    .stock(product.getStock())
+                    .build());
+        }
     }
 }
