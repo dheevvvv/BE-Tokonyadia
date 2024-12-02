@@ -1,0 +1,27 @@
+databases:
+  - name: springboot-postgres-db
+    plan: free
+    region: oregon 
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: springboot-postgres-db
+          property: connectionString
+    
+
+services:
+  - type: web
+    name: spring-boot-backend
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile ]
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: springboot-postgres-db
+          property: connectionString
+   
+
+
