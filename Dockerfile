@@ -13,9 +13,9 @@ FROM openjdk:17-alpine
 WORKDIR /app
 
 # Menyalin hasil build (file JAR) dari stage 1
-COPY --from=builder /app/target/tokonyadia-api-0.0.1-SNAPSHOT.jar /app/tokonyadia-api.jar
+COPY --from=builder /app/target/tokonyadia_api-0.0.1-SNAPSHOT.jar /app/tokonyadia_api.jar
 
 
 
 # Perintah untuk menjalankan aplikasi
-ENTRYPOINT ["java", "-jar", "tokonyadia-api.jar"]
+ENTRYPOINT ["java", "-jar", "tokonyadia_api.jar"]
