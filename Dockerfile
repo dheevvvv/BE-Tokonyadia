@@ -1,5 +1,5 @@
 # Stage 1: Build aplikasi menggunakan Maven
-FROM maven:3.9.1-openjdk-17-slim AS builder
+FROM maven:3.9.4-eclipse-temurin-17 AS builder
 WORKDIR /app
 
 # Menyalin semua file proyek ke dalam container
@@ -14,6 +14,7 @@ WORKDIR /app
 
 # Menyalin hasil build (file JAR) dari stage 1
 COPY --from=builder /app/target/tokonyadia-api-0.0.1-SNAPSHOT.jar /app/tokonyadia-api.jar
+
 
 
 # Perintah untuk menjalankan aplikasi
