@@ -103,6 +103,14 @@
 			<version>19.0.0</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+			<version>6.5.1.RELEASE</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
